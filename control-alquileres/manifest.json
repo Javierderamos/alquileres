@@ -1,0 +1,25 @@
+{
+  "name": "Control de Alquileres",
+  "short_name": "Alquileres",
+  "description": "Control de alquileres e inversiones inmobiliarias para pequeños propietarios. Datos guardados solo en el dispositivo.",
+  "id": "./",
+  "start_url": "./index.html#/resumen",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone"],
+  "orientation": "any",
+  "background_color": "#f3f5f8",
+  "theme_color": "#1d3557",
+  "lang": "es-ES",
+  "dir": "ltr",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Cobrar alquiler", "url": "./index.html#/alquileres", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Calendario", "url": "./index.html#/calendario", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

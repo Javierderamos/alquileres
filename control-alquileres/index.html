@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Control de Alquileres</title>
+  <meta name="description" content="Control de alquileres e inversiones inmobiliarias para pequeños propietarios. Datos guardados solo en el dispositivo.">
+  <meta name="theme-color" content="#1d3557">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Alquileres">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar" aria-label="Menú principal">
+      <div class="brand"><img src="icons/icon-192.png" alt="" width="34" height="34"><div><b>Control de Alquileres</b><small>e inversiones inmobiliarias</small></div></div>
+      <nav id="side-nav"></nav>
+      <div class="side-foot">
+        <button type="button" class="btn btn-block" data-act="exportar">⬇ Exportar copia</button>
+        <button type="button" class="btn btn-block btn-primary" id="btn-install" data-act="instalar" hidden>Instalar aplicación</button>
+        <small>Datos guardados solo en este dispositivo</small>
+      </div>
+    </aside>
+    <div class="side-backdrop" data-act="menu"></div>
+    <div id="main-wrap">
+      <header id="topbar">
+        <button type="button" class="icon-btn only-m" data-act="menu" aria-label="Abrir menú">☰</button>
+        <a href="#/resumen" class="top-title only-m">Control de Alquileres</a>
+        <form class="top-search" data-search="1" role="search">
+          <input type="search" name="q" placeholder="Buscar (caldera, 2026, inquilino…)" aria-label="Buscar">
+        </form>
+        <a href="#/buscar" class="icon-btn only-m" aria-label="Buscar">🔎</a>
+        <a href="#/alertas" class="icon-btn bell" aria-label="Alertas">🔔<span class="badge badge-al" hidden></span></a>
+        <button type="button" class="btn btn-primary btn-quick" data-act="quick" aria-label="Acción rápida">＋<span class="only-d"> Acción rápida</span></button>
+      </header>
+      <main id="view" tabindex="-1"><div class="loading">Cargando…</div></main>
+    </div>
+    <nav id="bottomnav" aria-label="Navegación"></nav>
+  </div>
+  <div id="modal-root"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <noscript>Esta aplicación necesita JavaScript activado.</noscript>
+
+  <script src="js/util.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/calc.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/forms.js"></script>
+  <script src="js/views.js"></script>
+  <script src="js/ficha.js"></script>
+  <script src="js/demo.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
