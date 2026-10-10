@@ -85,11 +85,26 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); ou
 .timeline .is-strength { background: var(--accent-soft); }
 
 .cards { display: grid; gap: 18px; }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); overflow: hidden; }
-@media (max-width: 760px) { .card { grid-template-columns: minmax(0, 1fr); } }
-.stage { background: var(--stage); display: grid; grid-template-rows: auto auto; padding: 10px; gap: 8px; border-right: 1px solid var(--line); }
-@media (max-width: 760px) { .stage { border-right: 0; border-bottom: 1px solid var(--line); } }
-.stage svg { width: 100%; height: auto; display: block; max-width: 100%; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; }
+.media { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 300px); gap: 1px; background: var(--line); border-bottom: 1px solid var(--line); }
+.media.single .photo { grid-column: span 2; }
+.media.nophoto { grid-template-columns: minmax(0, 1fr); }
+.media.nophoto .stage { max-width: 460px; width: 100%; justify-self: center; }
+@media (max-width: 760px) {
+  .media { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .media .stage { grid-column: 1 / -1; }
+  .stage svg { max-width: 250px; }
+}
+.photo { margin: 0; position: relative; background: #1b1f23; min-width: 0; }
+.photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; max-width: 100%; }
+.photo figcaption { position: absolute; left: 8px; bottom: 8px; background: rgba(12, 16, 20, .78); color: #fff; font-family: var(--display); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; font-size: .9rem; padding: 2px 8px; border-radius: 4px; }
+.photo-note { padding: 8px 20px 0; font-size: .9rem; color: var(--muted); }
+.weight { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 8px 14px; border-radius: 8px; background: var(--accent-soft); }
+.weight .wlabel { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.weight b { font-family: var(--display); font-size: 1.35rem; font-weight: 600; }
+.weight .muted { font-size: .9rem; }
+.stage { background: var(--stage); display: grid; grid-template-rows: auto auto; padding: 10px; gap: 8px; align-content: center; min-width: 0; }
+.stage svg { width: 100%; height: auto; display: block; max-width: 340px; justify-self: center; }
 .stage-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .stage-bar button { font: inherit; font-size: .88rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
 .stage-bar button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight: 700; }
@@ -163,7 +178,7 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
   <header class="top">
     <div class="eyebrow">Programa de fuerza · 8 semanas · 4 sesiones semanales</div>
     <h1>Retorno a la Fuerza</h1>
-    <p class="lead">Rutinas de iniciación para retomar el entrenamiento en el gimnasio tras más de tres años de inactividad. Trabajan pecho, espalda, piernas, brazos y abdomen. Cada ejercicio incluye una ilustración animada con la musculatura implicada resaltada en rojo.</p>
+    <p class="lead">Rutinas de iniciación para retomar el entrenamiento en el gimnasio tras más de tres años de inactividad. Trabajan pecho, espalda, piernas, brazos y abdomen. Cada ejercicio incluye fotografías reales de la posición inicial y final, un esquema animado con la musculatura implicada resaltada en rojo y el peso de partida recomendado.</p>
     <div class="chips">
       <span class="chip">Edad <b>55</b></span>
       <span class="chip">Peso <b>100 kg</b></span>
@@ -176,8 +191,8 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
 
   <section class="notice" aria-label="Aviso previo">
     <strong>Antes de empezar</strong>
-    <p>No consta información sobre lesiones o patologías (tensión arterial, corazón, diabetes, espalda, rodillas u hombros). Por la edad, el peso y el tiempo de inactividad, se recomienda una revisión médica previa y seguir las indicaciones del médico, que puede pedir una prueba de esfuerzo. Si existe cualquier patología o molestia, el programa debe adaptarse antes de comenzar.</p>
-    <p>Las ilustraciones son esquemas en vista lateral para orientar la técnica. No sustituyen la supervisión de un profesional del gimnasio, que debe ajustar asientos y respaldos de las máquinas en la primera sesión.</p>
+    <p>Declara no tener lesiones ni enfermedades conocidas. Aun así, por la edad, el peso y el tiempo de inactividad, conviene una revisión médica previa. Si aparece cualquier molestia, el programa debe adaptarse.</p>
+    <p>Cada ejercicio muestra fotografías reales de las posiciones inicial y final y un esquema animado con el músculo trabajado. Pida a un profesional del gimnasio que le ajuste asientos y respaldos de las máquinas en la primera sesión.</p>
   </section>
 
   <nav class="tabs" role="tablist" aria-label="Secciones">
@@ -222,6 +237,20 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
           <li>Si una sesión le cuesta más de lo habitual o ha dormido mal, mantenga el peso anterior.</li>
         </ul>
       </div>
+    </div>
+    <div class="section">
+      <h2>Pesos de partida</h2>
+      <div class="panel">
+        <h3>Cómo usar esta tabla</h3>
+        <ul>
+          <li>Son <b>valores orientativos</b> para una persona que retoma el ejercicio. No son un dato exacto: la resistencia real varía según la marca de la máquina, por las poleas y palancas.</li>
+          <li>En la primera sesión empiece por el <b>valor más bajo</b> del rango.</li>
+          <li>Prueba de ajuste: si no puede completar 15 repeticiones con buena técnica, baje un escalón. Si al terminar 15 repeticiones cree que podría hacer más de 6 adicionales con facilidad, suba un escalón.</li>
+          <li>En la prensa, el peso indicado es el de los discos añadidos. No incluye el carro de la máquina, cuyo peso varía.</li>
+          <li>Anote en cada ejercicio el peso que use: la aplicación lo recuerda en este navegador.</li>
+        </ul>
+      </div>
+      <div class="scroll"><table class="week" id="weightTable"></table></div>
     </div>
   </section>
 
@@ -296,7 +325,7 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
     </div>
   </section>
 
-  <footer>Programa orientativo de iniciación. Las cargas concretas dependen de cada máquina y de cada persona: se eligen en la primera semana con un peso que permita superar con holgura las repeticiones indicadas.</footer>
+  <footer>Programa orientativo de iniciación. Las cargas concretas dependen de cada máquina y de cada persona: se ajustan en la primera semana con la prueba descrita en «Semana y progresión».<br>Fotografías: <a href="https://github.com/yuhonas/free-exercise-db" target="_blank" rel="noopener">Free Exercise DB</a>, banco de imágenes de dominio público (licencia Unlicense). Las personas fotografiadas no guardan relación con este programa.</footer>
 </div>
 
 <script>
@@ -417,14 +446,14 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
       B: { hip: [84, 108], t: -10, arm: { ua: 15, fa: 60 }, leg: { ta: 90, sa: 80 }, ft: 172 }
     },
     gemelos: {
-      name: "Elevación de talones de pie", group: "piernas", type: "calf",
-      muscles: ["Gemelos", "Sóleo"], hl: ["calf"],
-      setup: "De pie, pies a la anchura de las caderas, sujetándose con las manos a un apoyo fijo (espaldera, máquina o barra).",
-      cues: ["Suba los talones todo lo posible apoyándose en la parte delantera del pie.", "Pausa arriba de un segundo.", "Baje despacio hasta apoyar el talón."],
-      avoid: ["Rebotar abajo.", "Cargar el peso en el apoyo de las manos: el apoyo es solo para el equilibrio."],
-      eq: [GROUND, ["l", 150, 40, 150, 148, 4], ["l", 142, 48, 156, 48, 4]],
-      A: { hip: [100, 76], t: 0, arm: { to: [146, 50], b: 1 }, leg: { to: [100, 143], b: -1 }, ft: 90 },
-      B: { hip: [101, 66], t: 0, arm: { to: [146, 46], b: 1 }, leg: { to: [101, 133], b: -1 }, ft: 42 }
+      name: "Elevación de talones en máquina de pie", group: "piernas", type: "calf",
+      muscles: ["Gemelos", "Sóleo"], hl: ["calf"], hold: "shpad",
+      setup: "Hombros bajo las almohadillas, la parte delantera de los pies sobre el escalón y los talones libres. Piernas estiradas sin bloquear las rodillas.",
+      cues: ["Suba los talones todo lo posible.", "Pausa arriba de un segundo.", "Baje despacio hasta notar un ligero estiramiento del gemelo."],
+      avoid: ["Rebotar abajo.", "Doblar las rodillas para ayudarse.", "Usar cargas altas: las almohadillas cargan sobre la columna."],
+      eq: [["r", 66, 8, 10, 140], ["l", 76, 22, 96, 22, 4], ["r", 88, 140, 36, 8], ["l", 60, 148, 140, 148, 4]],
+      A: { hip: [100, 74], t: 0, arm: { ua: 25, fa: 172 }, leg: { to: [100, 141], b: -1 }, ft: 90 },
+      B: { hip: [101, 64], t: 0, arm: { ua: 25, fa: 172 }, leg: { to: [101, 131], b: -1 }, ft: 42 }
     },
     plancha_incl: {
       name: "Plancha inclinada con manos en banco", group: "abdomen", type: "time", static: true,
@@ -467,9 +496,9 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
       B: { hip: [70, 76], t: 68, arm: { ua: -120, fa: 0 }, arm2: { ua: 0, fa: 0 }, leg: { ta: 5, sa: 0 }, leg2: { ta: 0, sa: -90 }, ft: 90, ft2: -90 }
     },
     flexiones_incl: {
-      name: "Flexiones inclinadas en barra guiada", group: "pecho", type: "main",
+      name: "Flexiones inclinadas con manos en apoyo elevado", group: "pecho", type: "main",
       muscles: ["Pectoral", "Tríceps", "Abdomen"], hl: ["chest", "tri"],
-      setup: "Coloque la barra de la máquina guiada (multipower) a la altura de la cadera y bloqueada. Manos algo más abiertas que los hombros. Cuanto más alta la barra, más fácil el ejercicio.",
+      setup: "Manos sobre un cajón estable, un banco o la barra bloqueada de la máquina guiada (multipower), algo más abiertas que los hombros. Cuanto más alto el apoyo, más fácil el ejercicio: empiece a la altura de la cadera.",
       cues: ["Cuerpo recto de la cabeza a los talones.", "Baje el pecho hacia la barra doblando los codos a unos 45° del cuerpo.", "Empuje hasta estirar los brazos.", "Baje la barra un punto cuando las repeticiones resulten fáciles."],
       avoid: ["Dejar caer la cadera.", "Abrir los codos en cruz."],
       eq: [GROUND, ["l", 124, 14, 124, 148, 5], ["l", 112, 108, 124, 108, 3]],
@@ -498,7 +527,7 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
       B: { hip: [106, 110], t: -90, hd: -90, arm: { ua: 172, fa: -60 }, leg: { to: [138, 146], b: -1 } }
     },
     sentadilla_cajon: {
-      name: "Sentadilla a banco (sin peso)", group: "piernas", type: "main",
+      name: "Sentadilla a banco", group: "piernas", type: "main",
       muscles: ["Cuádriceps", "Glúteo"], hl: ["quad", "glute"],
       setup: "De pie delante de un banco o cajón estable, de espaldas a él. Pies algo más abiertos que las caderas. Cuando domine la técnica, puede sostener una mancuerna ligera contra el pecho.",
       cues: ["Lleve la cadera hacia atrás y abajo, como para sentarse.", "Toque el banco con el glúteo sin dejarse caer.", "Levántese empujando con todo el pie.", "Rodillas en la dirección de las puntas de los pies."],
@@ -539,6 +568,41 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
     { id: 4, name: "Día 4 · Tren inferior B", focus: "Piernas y abdomen", color: "var(--muscle)",
       list: ["sentadilla_cajon", "pm_rumano", "puente_gluteo", "curl_femoral", "gemelos", "plancha_incl", "bird_dog"] }
   ];
+  // ---------- Fotografías (Free Exercise DB, dominio público) ----------
+  const IMG = {
+    press_pecho: "Leverage_Chest_Press", jalon: "Wide-Grip_Lat_Pulldown", remo_polea: "Seated_Cable_Rows",
+    curl_biceps: "Dumbbell_Bicep_Curl", triceps_polea: "Triceps_Pushdown_-_Rope_Attachment", dead_bug: "Dead_Bug",
+    prensa: "Leg_Press", curl_femoral: "Seated_Leg_Curl", extension_cuad: "Leg_Extensions",
+    gemelos: "Standing_Calf_Raises", press_incl_db: "Incline_Dumbbell_Press", remo_db: "One-Arm_Dumbbell_Row",
+    flexiones_incl: "Incline_Push-Up", curl_polea: "Standing_Biceps_Cable_Curl", press_frances: "Lying_Dumbbell_Tricep_Extension",
+    sentadilla_cajon: "Dumbbell_Squat_To_A_Bench", puente_gluteo: "Butt_Lift_Bridge", pm_rumano: "Stiff-Legged_Dumbbell_Deadlift"
+  };
+  const IMG_SINGLE = { plancha_incl: "Incline_Push-Up_1.jpg" };
+  const IMG_LABELS = { prensa: ["Rodillas casi estiradas", "Rodillas flexionadas"] };
+  const PHOTO_NOTE = {
+    press_pecho: "La foto está tomada de frente: los codos van a la altura del pecho.",
+    gemelos: "La foto está tomada de espaldas.",
+    flexiones_incl: "En la foto, con las manos sobre un cajón.",
+    plancha_incl: "Se mantiene la posición de la foto, con las manos sobre un cajón o banco.",
+    sentadilla_cajon: "La foto muestra la versión con mancuernas. Las semanas 1 a 4 se hace sin peso.",
+    pm_rumano: "Mantenga las rodillas algo flexionadas, como se indica en el texto.",
+    press_frances: "Use mancuernas ligeras y baje despacio hacia los lados de la cabeza.",
+    bird_dog: "No hay fotografía libre de este ejercicio: guíese por el esquema animado."
+  };
+
+  // ---------- Pesos orientativos de partida (semana 1) e incremento ----------
+  const WEIGHT = {
+    press_pecho: ["10–20 kg", "2,5–5 kg"], jalon: ["20–30 kg", "2,5–5 kg"], remo_polea: ["15–25 kg", "2,5–5 kg"],
+    curl_biceps: ["4–6 kg por mano", "1–2 kg"], triceps_polea: ["7,5–12,5 kg", "2,5 kg"], dead_bug: ["Peso corporal", "—"],
+    prensa: ["40–60 kg añadidos", "5–10 kg"], curl_femoral: ["10–20 kg", "2,5–5 kg"], extension_cuad: ["10–15 kg", "2,5 kg"],
+    gemelos: ["20–30 kg", "5 kg"], plancha_incl: ["Peso corporal", "Apoyo más bajo"], bird_dog: ["Peso corporal", "—"],
+    press_incl_db: ["6–8 kg por mano", "1–2 kg"], remo_db: ["8–12 kg", "2 kg"], flexiones_incl: ["Peso corporal", "Apoyo más bajo"],
+    curl_polea: ["5–10 kg", "2,5 kg"], press_frances: ["3–5 kg por mano", "1 kg"],
+    sentadilla_cajon: ["Peso corporal", "Desde sem. 5: mancuerna de 6–10 kg al pecho"],
+    puente_gluteo: ["Peso corporal", "Desde sem. 5: disco de 5–10 kg sobre la cadera"],
+    pm_rumano: ["6–10 kg por mano", "2 kg"]
+  };
+
   const GROUPS = [
     ["pecho", "Pecho"], ["espalda", "Espalda"], ["piernas", "Piernas"], ["brazos", "Brazos"], ["abdomen", "Abdomen"]
   ];
@@ -652,6 +716,8 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
       el("circle", { r: 3.6, class: "hold" }, hold);
     } else if (ex.hold === "bar") {
       el("circle", { r: 4.6, class: "hold" }, hold);
+    } else if (ex.hold === "shpad") {
+      el("rect", { x: -24, y: -14, width: 20, height: 7, rx: 3, class: "hold" }, hold);
     }
     if (!ex.cable) pool.cable.setAttribute("visibility", "hidden");
     if (!ex.pad) pool.pad.setAttribute("visibility", "hidden");
@@ -780,7 +846,24 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
     const [sets, reps] = ph.rx[ex.type];
     const c = document.createElement("article");
     c.className = "card";
-    c.appendChild(stageFor(ex));
+    const media = document.createElement("div");
+    const photos = IMG[id] ? [IMG[id] + "_0.jpg", IMG[id] + "_1.jpg"] : (IMG_SINGLE[id] ? [IMG_SINGLE[id]] : []);
+    const labels = IMG_LABELS[id] || (photos.length === 1 ? ["Posición a mantener"] : ["Inicio", "Final"]);
+    media.className = "media" + (photos.length === 0 ? " nophoto" : photos.length === 1 ? " single" : "");
+    photos.forEach((src, i) => {
+      const fg = document.createElement("figure");
+      fg.className = "photo";
+      const im = document.createElement("img");
+      im.src = "img/" + src; im.loading = "lazy"; im.decoding = "async"; im.width = 640; im.height = 427;
+      im.alt = `${ex.name}: ${labels[i].toLowerCase()}`;
+      const cap = document.createElement("figcaption");
+      cap.textContent = (photos.length > 1 ? (i + 1) + " · " : "") + labels[i];
+      fg.append(im, cap);
+      media.appendChild(fg);
+    });
+    media.appendChild(stageFor(ex));
+    c.appendChild(media);
+    if (PHOTO_NOTE[id]) { const pn = document.createElement("p"); pn.className = "photo-note"; pn.textContent = PHOTO_NOTE[id]; c.appendChild(pn); }
     const info = document.createElement("div");
     info.className = "info";
     const repsLabel = ex.type === "time" ? "Duración" : "Repeticiones";
@@ -793,6 +876,7 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
         <div><small>Descanso</small><b>${restFor(ex, ph)}</b></div>
         <div><small>Esfuerzo</small><b>${ex.type === "time" || ex.type === "reps" ? "Técnica" : ph.effort}</b></div>
       </div>
+      <div class="weight"><span class="wlabel">Peso de partida</span><b>${WEIGHT[id][0]}</b><span class="muted">Subida: ${WEIGHT[id][1]}</span></div>
       <p class="setup"><b>Posición:</b> ${ex.setup}</p>
       <div class="cols">
         <div><h4>Cómo hacerlo</h4><ul>${ex.cues.map(x => `<li>${x}</li>`).join("")}</ul></div>
@@ -895,6 +979,9 @@ footer { margin-top: 40px; font-size: .88rem; color: var(--muted); max-width: 80
       const d = DAYS[di];
       return `<tr><td><b>${n}</b></td><td><span class="dot" style="background:${d.color}"></span>${d.name}</td><td>${d.list.map(id => EX[id].name).join(" · ")}</td></tr>`;
     }).join("")}</tbody>`;
+    $("#weightTable").innerHTML = `<thead><tr><th>Ejercicio</th><th>Zona</th><th>Peso de partida</th><th>Subida al progresar</th></tr></thead><tbody>${
+      GROUPS.map(([g, label]) => Object.keys(EX).filter(k => EX[k].group === g).map(k =>
+        `<tr><td>${EX[k].name}</td><td class="muted">${label}</td><td><b>${WEIGHT[k][0]}</b></td><td>${WEIGHT[k][1]}</td></tr>`).join("")).join("")}</tbody>`;
     $("#phaseCards").innerHTML = PHASES.map(p => `
       <div class="phase"><span class="eyebrow">${p.label}</span><span class="w">${p.name}</span>
       <p>Ejercicios principales: <b>${p.rx.main[0]} × ${p.rx.main[1]}</b></p>
