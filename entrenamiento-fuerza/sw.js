@@ -1,5 +1,5 @@
 // Caché para uso sin conexión en el gimnasio
-const CACHE = "retorno-fuerza-v1";
+const CACHE = "retorno-fuerza-v2";
 const FILES = [
   "./",
   "index.html",
