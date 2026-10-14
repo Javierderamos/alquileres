@@ -122,6 +122,31 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); ou
 .weight b { font-family: var(--display); font-size: 1.35rem; font-weight: 600; }
 .weight .muted { font-size: .9rem; }
 #goalTable td:not(:first-child):not(:last-child), #goalTable th { white-space: nowrap; }
+.refs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 12px; }
+.refs a { display: block; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.refs img { display: block; width: 100%; height: auto; }
+.sources { gap: 10px !important; }
+.tests input { width: 4.6em; font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.tests td { vertical-align: middle; }
+.tests .calc { font-family: var(--display); font-size: 1.15rem; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tests .now { color: var(--accent); }
+.tests .pair { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+@media (max-width: 760px) {
+  .scroll:has(.tests) { overflow: visible; }
+  table.tests { min-width: 0; display: block; }
+  .tests thead { display: none; }
+  .tests tbody { display: block; }
+  .tests tr { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 14px; border-bottom: 1px solid var(--line); }
+  .tests tr:last-child { border-bottom: 0; }
+  table.tests td { display: block; border: 0; padding: 0; min-width: 0; }
+  .tests td:nth-child(-n+3) { grid-column: 1 / -1; }
+  .tests td[data-l]::before { content: attr(data-l); display: block; font-family: var(--body); font-size: .72rem; font-weight: 400; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .tests td[data-k="m"] { display: flex; align-items: baseline; gap: 8px; }
+  .tests td[data-k="m"]::before { display: inline; }
+  .tests input { width: 6em; font-size: 1.05rem; }
+}
+.weight.mine { background: var(--accent); color: var(--accent-ink); }
+.weight.mine .wlabel, .weight.mine .muted, .weight.mine .goal, .weight.mine .goal b { color: var(--accent-ink); opacity: .92; }
 .weight .goal { flex-basis: 100%; font-size: .9rem; color: var(--muted); }
 .weight .goal b { font-size: 1.05rem; color: var(--ink); }
 .stage { background: var(--stage); display: grid; grid-template-rows: auto auto; padding: 10px; gap: 8px; align-content: center; min-width: 0; }
@@ -297,6 +322,32 @@ details.tech .setup { margin-bottom: 10px; }
 
   <!-- SEMANA -->
   <section id="p-semana" role="tabpanel" aria-labelledby="tab-semana" hidden>
+    <div class="section" id="calc">
+      <h2>Calcule sus pesos</h2>
+      <p class="muted" style="max-width:70ch">En lugar de una tabla genérica, el peso de cada ejercicio se calcula a partir de una prueba suya. Así se tienen en cuenta su fuerza real y la máquina concreta de su gimnasio.</p>
+      <div class="grid2">
+        <div class="panel">
+          <h3>1 · Prueba de carga</h3>
+          <ul>
+            <li>Hágala en la <b>segunda sesión</b> de cada ejercicio, cuando ya conozca el movimiento.</li>
+            <li>Tras calentar, elija un peso que le parezca moderado y haga repeticiones con buena técnica.</li>
+            <li>Pare cuando sienta que <b>le quedan unas 2 repeticiones</b>. No llegue nunca al fallo.</li>
+            <li>Anote el peso y las repeticiones hechas. Si supera 10, el peso es ligero: súbalo y repita la prueba otro día. Las estimaciones son más fiables con 10 repeticiones o menos.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>2 · Cálculo</h3>
+          <ul>
+            <li>Con la fórmula de Brzycki se estima su <b>máximo</b> (el peso que podría mover una sola vez): peso × 36 ÷ (37 − repeticiones).</li>
+            <li>Su peso de cada fase es un porcentaje de ese máximo: <b>50 %</b> en las semanas 1–2, <b>60 %</b> en las 3–4, <b>65 %</b> en las 5–6 y <b>70 %</b> en las 7–8.</li>
+            <li>Se redondea al escalón real: 1 kg en mancuernas, 2,5 kg en poleas y máquinas, 5 kg en la prensa.</li>
+            <li>No usa las repeticiones «en recámara» para el cálculo. Por eso el máximo sale algo por debajo del real, lo que da un margen de seguridad.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scroll"><table class="week tests" id="testTable"></table></div>
+      <p class="muted" style="font-size:.9rem">Los datos se guardan en este navegador. Los pesos calculados aparecen automáticamente en cada ejercicio y en el modo entrenamiento.</p>
+    </div>
     <div class="section">
       <h2>Semana tipo</h2>
       <p class="muted" style="max-width:70ch">Los días son orientativos. Conviene no encadenar más de dos sesiones seguidas y dejar al menos un día de descanso entre los dos bloques de sesiones.</p>
@@ -309,8 +360,9 @@ details.tech .setup { margin-bottom: 10px; }
       <div class="panel">
         <h3>Cuándo subir el peso</h3>
         <ul>
-          <li>Cuando complete el número máximo de repeticiones indicado en todas las series, con técnica correcta, en dos sesiones seguidas.</li>
-          <li>Suba al siguiente escalón disponible (la placa o mancuerna inmediatamente superior) y vuelva al número mínimo de repeticiones.</li>
+          <li>Cuando, en todas las series y con técnica correcta, pueda hacer <b>1 o 2 repeticiones más</b> del máximo indicado, suba la carga entre un <b>2 % y un 10 %</b> (criterio del American College of Sports Medicine).</li>
+          <li>En la práctica: el escalón inmediatamente superior (2,5 kg en máquinas y poleas, 1–2 kg en mancuernas, 5 kg en la prensa). Después vuelva al número mínimo de repeticiones.</li>
+          <li>Al cambiar de fase, la aplicación recalcula su peso con el nuevo porcentaje. Si el peso que propone le resulta claramente fácil o difícil, repita la prueba de carga.</li>
           <li>En las semanas 1 y 2 no se sube peso: el objetivo es aprender la técnica y que las articulaciones se adapten.</li>
           <li>Si una sesión le cuesta más de lo habitual o ha dormido mal, mantenga el peso anterior.</li>
         </ul>
@@ -343,6 +395,27 @@ details.tech .setup { margin-bottom: 10px; }
         </ul>
       </div>
       <div class="scroll"><table class="week" id="goalTable"></table></div>
+    </div>
+    <div class="section">
+      <h2>Infografías de referencia</h2>
+      <p class="muted" style="max-width:70ch">Infografías aportadas por usted, de autoría y fuente desconocidas. Sus cifras están calculadas para un hombre de 70 kg; las metas de la tabla anterior las adaptan a 100 kg. Pulse una imagen para verla completa.</p>
+      <div class="refs">
+        <a href="img/ref/ref-comparar.jpg" target="_blank" rel="noopener"><img src="img/ref/ref-comparar.jpg" loading="lazy" width="900" height="1118" alt="Infografía: antes de compararte, lee esto"></a>
+        <a href="img/ref/ref-progresar.jpg" target="_blank" rel="noopener"><img src="img/ref/ref-progresar.jpg" loading="lazy" width="900" height="1136" alt="Infografía: cómo pasar al siguiente nivel"></a>
+        <a href="img/ref/ref-tren-superior.jpg" target="_blank" rel="noopener"><img src="img/ref/ref-tren-superior.jpg" loading="lazy" width="900" height="1127" alt="Infografía: tren superior, cuánto deberías cargar"></a>
+        <a href="img/ref/ref-tren-inferior.jpg" target="_blank" rel="noopener"><img src="img/ref/ref-tren-inferior.jpg" loading="lazy" width="900" height="1155" alt="Infografía: tren inferior, cuánto deberías cargar"></a>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Fuentes consultadas</h2>
+      <div class="panel">
+        <ul class="sources">
+          <li>American College of Sports Medicine (2009). <i>Progression Models in Resistance Training for Healthy Adults</i>. Med Sci Sports Exerc 41(3):687–708. Principiantes: cargas de 8–12 repeticiones máximas; mayores: 60–80 % del máximo, 1–3 series de 8–12; subir 2–10 % al superar en 1–2 repeticiones el objetivo. <a href="https://journals.lww.com/acsm-msse/Fulltext/2009/03000/Progression_Models_in_Resistance_Training_for.26.aspx" target="_blank" rel="noopener">Texto completo</a></li>
+          <li>American College of Sports Medicine (2026). Actualización de las recomendaciones de entrenamiento de fuerza: la constancia pesa más que la complejidad del programa. <a href="https://acsm.org/resistance-training-guidelines-update-2026/" target="_blank" rel="noopener">Nota de ACSM</a></li>
+          <li>Fragala et al. (2019). <i>Resistance Training for Older Adults: Position Statement From the National Strength and Conditioning Association</i>. J Strength Cond Res 33(8):2019–2052. Progresión individualizada que empieza con cargas bajas y avanza hasta en torno al 80 % del máximo. <a href="https://journals.lww.com/nsca-jscr/fulltext/2019/08000/resistance_training_for_older_adults__position.1.aspx" target="_blank" rel="noopener">Texto completo</a></li>
+          <li>Fórmulas de estimación del máximo (Brzycki, Epley): más fiables con 10 repeticiones o menos; en personas mayores sin entrenar se han descrito desviaciones de hasta un 20 %, de ahí el criterio conservador. <a href="https://en.wikipedia.org/wiki/One-repetition_maximum" target="_blank" rel="noopener">Resumen</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11435939" target="_blank" rel="noopener">Estudio 2024</a></li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -744,13 +817,38 @@ details.tech .setup { margin-bottom: 10px; }
   const GOAL_BY_ID = {};
   GOALS.forEach(g => { if (g.id) GOAL_BY_ID[g.id] = g; });
 
+  // ---------- Cálculo de cargas a partir de la prueba (Brzycki) ----------
+  const TEST_STEP = { press_pecho: 2.5, press_incl_db: 1, jalon: 2.5, remo_polea: 2.5, remo_db: 1, prensa: 5, curl_femoral: 2.5,
+    extension_cuad: 2.5, gemelos: 5, pm_rumano: 1, curl_biceps: 1, triceps_polea: 2.5, curl_polea: 2.5, press_frances: 1 };
+  const PCT = [0.5, 0.6, 0.65, 0.7];
+  const num = v => parseFloat(String(v == null ? "" : v).replace(",", "."));
+  function e1rm(id) {
+    const t = store.tests && store.tests[id]; if (!t) return 0;
+    const kg = num(t.kg), r = parseInt(t.reps, 10);
+    if (!(kg > 0) || !(r >= 1 && r <= 10)) return 0;
+    return kg * 36 / (37 - r);
+  }
+  function recKg(id, ph) {
+    const m = e1rm(id), st = TEST_STEP[id]; if (!m || !st) return null;
+    return Math.max(st, Math.round(m * PCT[ph] / st) * st);
+  }
+  const fmtKg = v => (Math.round(v * 10) / 10).toString().replace(".", ",") + " kg";
+  const perHand = id => EX[id].hold === "db" && id !== "remo_db" ? " por mano" : "";
+  function weightHTML(id) {
+    const r = recKg(id, store.phase);
+    const goal = GOAL_BY_ID[id] ? `<span class="goal">Meta tras el programa: <b>${goalKg(GOAL_BY_ID[id], 0)}</b>${id === "pm_rumano" ? " con barra" : ""}</span>` : "";
+    if (r) return `<div class="weight mine"><span class="wlabel">Su peso · ${PHASES[store.phase].label}</span><b>${fmtKg(r)}${perHand(id)}</b><span class="muted">${Math.round(PCT[store.phase] * 100)} % de su máximo estimado</span>${goal}</div>`;
+    const hint = TEST_STEP[id] ? `<span class="goal">Haga la prueba de carga (pestaña Progresión) para calcular su peso exacto.</span>` : "";
+    return `<div class="weight"><span class="wlabel">Peso de partida</span><b>${WEIGHT[id][0]}</b><span class="muted">Subida: ${WEIGHT[id][1]}</span>${goal}${hint}</div>`;
+  }
+
   const GROUPS = [
     ["pecho", "Pecho"], ["espalda", "Espalda"], ["piernas", "Piernas"], ["brazos", "Brazos"], ["abdomen", "Abdomen"]
   ];
 
   // ---------- Almacenamiento local (opcional) ----------
   const KEY = "retorno-fuerza-v1";
-  let store = { day: 0, phase: 0, log: {} };
+  let store = { day: 0, phase: 0, log: {}, tests: {} };
   try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) store = Object.assign(store, s); } catch (e) {}
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} };
 
@@ -1036,7 +1134,7 @@ details.tech .setup { margin-bottom: 10px; }
         <div><small>Descanso</small><b>${restFor(ex, ph)}</b></div>
         <div><small>Esfuerzo</small><b>${ex.type === "time" || ex.type === "reps" ? "Técnica" : ph.effort}</b></div>
       </div>
-      <div class="weight"><span class="wlabel">Peso de partida</span><b>${WEIGHT[id][0]}</b><span class="muted">Subida: ${WEIGHT[id][1]}</span>${GOAL_BY_ID[id] ? `<span class="goal">Meta tras el programa: <b>${goalKg(GOAL_BY_ID[id], 0)}</b>${id === "pm_rumano" ? " con barra" : ""}</span>` : ""}</div>
+      ${weightHTML(id)}
       ${techHTML(ex, !isNarrow())}`;
     if (withLog) {
       const key = withLog + ":" + id;
@@ -1090,7 +1188,7 @@ details.tech .setup { margin-bottom: 10px; }
     PHASES.forEach((p, i) => {
       const b = document.createElement("button"); b.type = "button"; b.textContent = p.label;
       b.setAttribute("aria-pressed", String(i === store.phase));
-      b.addEventListener("click", () => { store.phase = i; save(); renderSelectors(); renderDay(); renderCatalog(); });
+      b.addEventListener("click", () => { store.phase = i; save(); renderSelectors(); renderDay(); renderCatalog(); renderTests(); });
       ps.appendChild(b);
     });
     const ph = PHASES[store.phase];
@@ -1138,6 +1236,7 @@ details.tech .setup { margin-bottom: 10px; }
       const d = DAYS[di];
       return `<tr><td><b>${n}</b></td><td><span class="dot" style="background:${d.color}"></span>${d.name}</td><td>${d.list.map(id => EX[id].name).join(" · ")}</td></tr>`;
     }).join("")}</tbody>`;
+    renderTests();
     $("#goalTable").innerHTML = `<thead><tr><th>Ejercicio</th><th>Empiezas</th><th>Vas bien</th><th>Fuerte</th><th>Observación</th></tr></thead><tbody>${
       GOALS.map(g => `<tr><td><b>${g.ex}</b></td><td><b>${goalKg(g, 0)}</b></td><td>${goalKg(g, 1)}</td><td>${goalKg(g, 2)}</td><td class="muted">${g.note}</td></tr>`).join("")}</tbody>`;
     $("#weightTable").innerHTML = `<thead><tr><th>Ejercicio</th><th>Zona</th><th>Peso de partida</th><th>Subida al progresar</th></tr></thead><tbody>${
@@ -1148,6 +1247,35 @@ details.tech .setup { margin-bottom: 10px; }
       <p>Ejercicios principales: <b>${p.rx.main[0]} × ${p.rx.main[1]}</b></p>
       <p>Esfuerzo <b>${p.effort}</b> (${p.rir}). Descanso ${p.rest}.</p>
       <p class="muted">${p.text}</p></div>`).join("");
+  }
+
+  function renderTests() {
+    store.tests = store.tests || {};
+    const ids = GROUPS.flatMap(([g]) => Object.keys(EX).filter(k => EX[k].group === g && TEST_STEP[k]));
+    const tb = $("#testTable");
+    tb.innerHTML = `<thead><tr><th>Ejercicio</th><th>Prueba: kg × repeticiones</th><th>Máximo estimado</th>${PHASES.map((p, i) => `<th${i === store.phase ? ' class="now"' : ""}>${p.label}</th>`).join("")}</tr></thead><tbody></tbody>`;
+    const body = tb.querySelector("tbody");
+    ids.forEach(id => {
+      const t = store.tests[id] || (store.tests[id] = { kg: "", reps: "" });
+      const tr = document.createElement("tr");
+      const safe = id.replace(/[^a-z0-9]/gi, "-");
+      tr.innerHTML = `<td>${EX[id].name}<br><span class="muted" style="font-size:.85rem">${perHand(id) ? "Peso por mano" : "Peso total"}</span></td>
+        <td><div class="pair"><input id="t-kg-${safe}" type="number" inputmode="decimal" min="0" step="0.5" aria-label="Kilos de la prueba de ${EX[id].name}" placeholder="kg"> × <input id="t-r-${safe}" type="number" inputmode="numeric" min="1" max="10" step="1" aria-label="Repeticiones de la prueba de ${EX[id].name}" placeholder="rep."></div></td>
+        <td class="calc" data-k="m" data-l="Máximo estimado"></td>${PHASES.map((p, i) => `<td class="calc${i === store.phase ? " now" : ""}" data-k="p${i}" data-l="${p.label}"></td>`).join("")}`;
+      const [ik, ir] = tr.querySelectorAll("input");
+      ik.value = t.kg; ir.value = t.reps;
+      const paint = () => {
+        const m = e1rm(id), reps = parseInt(t.reps, 10);
+        tr.querySelector('[data-k="m"]').textContent = m ? fmtKg(Math.round(m * 2) / 2) : (reps > 10 ? "Más de 10 rep.: suba el peso" : "—");
+        PHASES.forEach((p, i) => { const r = recKg(id, i); tr.querySelector(`[data-k="p${i}"]`).textContent = r ? fmtKg(r) : "—"; });
+      };
+      const upd = () => { t.kg = ik.value; t.reps = ir.value; save(); paint(); };
+      ik.addEventListener("input", upd); ir.addEventListener("input", upd);
+      ik.addEventListener("change", () => { renderDay(); renderCatalog(); });
+      ir.addEventListener("change", () => { renderDay(); renderCatalog(); });
+      paint();
+      body.appendChild(tr);
+    });
   }
 
   // pestañas
@@ -1272,10 +1400,10 @@ details.tech .setup { margin-bottom: 10px; }
     const rs = restSec(ex);
     pad.innerHTML = `<h2 class="s-name" id="sTitle">${ex.name}</h2>
       <div class="s-rx">${sets} × ${reps} <span>· descanso ${fmt(rs)} · ${ex.type === "time" || ex.type === "reps" ? "técnica" : "esfuerzo " + ph.effort}</span></div>
-      <div class="weight"><span class="wlabel">Peso de partida</span><b>${WEIGHT[id][0]}</b><span class="muted">Subida: ${WEIGHT[id][1]}</span>${GOAL_BY_ID[id] ? `<span class="goal">Meta tras el programa: <b>${goalKg(GOAL_BY_ID[id], 0)}</b>${id === "pm_rumano" ? " con barra" : ""}</span>` : ""}</div>`;
+      ${weightHTML(id)}`;
     if (!["reps", "time"].includes(ex.type) && !NO_KG.includes(id)) {
       const step = ex.hold === "db" ? 1 : 2.5;
-      const base = parseFloat(WEIGHT[id][0].replace(",", ".")) || 0;
+      const base = recKg(id, store.phase) || parseFloat(WEIGHT[id][0].replace(",", ".")) || 0;
       const kg = document.createElement("div"); kg.className = "kg";
       kg.innerHTML = `<div class="kg-box"><button type="button" aria-label="Restar ${String(step).replace(".", ",")} kg">−</button><input id="sKg-${id}" type="number" inputmode="decimal" min="0" step="0.5" placeholder="${base}" aria-label="Peso usado en kg"><button type="button" aria-label="Sumar ${String(step).replace(".", ",")} kg">+</button></div><span class="kg-l">kg usados${ex.hold === "db" ? " (por mano)" : ""}</span>`;
       const [bm, inp, bp] = kg.querySelectorAll("button, input");

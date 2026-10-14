@@ -1,5 +1,5 @@
 // Caché para uso sin conexión en el gimnasio
-const CACHE = "retorno-fuerza-v2";
+const CACHE = "retorno-fuerza-v3";
 const FILES = [
   "./",
   "index.html",
@@ -41,7 +41,11 @@ const FILES = [
   "img/Triceps_Pushdown_-_Rope_Attachment_0.jpg",
   "img/Triceps_Pushdown_-_Rope_Attachment_1.jpg",
   "img/Wide-Grip_Lat_Pulldown_0.jpg",
-  "img/Wide-Grip_Lat_Pulldown_1.jpg"
+  "img/Wide-Grip_Lat_Pulldown_1.jpg",
+  "img/ref/ref-comparar.jpg",
+  "img/ref/ref-progresar.jpg",
+  "img/ref/ref-tren-inferior.jpg",
+  "img/ref/ref-tren-superior.jpg"
 ];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
